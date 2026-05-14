@@ -213,4 +213,7 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(port, () => console.log(`Server started on PORT:${port}`));
+if (process.env.NODE_ENV !== 'production') {
+  server.listen(port, () => console.log(`Server started on PORT:${port}`));
+}
+export default app;
