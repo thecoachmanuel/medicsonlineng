@@ -181,12 +181,7 @@ export const migrationConfig: ApiMigrationConfig = {
     description: 'Verify Paystack payment - EXCLUDED from migration',
     migrated: false
   },
-  '/api/user/verifyRazorpay': {
-    encrypted: false,
-    priority: 'low',
-    description: 'Payment verification - EXCLUDED from migration',
-    migrated: false
-  },
+
   '/api/vitals/latest': {
     encrypted: true,
     priority: 'low',

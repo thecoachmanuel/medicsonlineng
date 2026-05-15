@@ -244,11 +244,14 @@ const paymentPaystack = async (req, res) => {
       return res.json({ success: false, message: 'Appointment Cancelled or not found' });
     }
 
+    const origin = req.headers.origin || 'http://localhost:5173';
+
     // creating options for paystack payment
     const options = {
       amount: appointmentData.amount * 100, // Paystack amount is in kobo (smallest unit of NGN)
       email: appointmentData.userData.email, // User's email
       currency: 'NGN', // Paystack uses NGN for Nigerian Naira
+      callback_url: `${origin}/verify`,
       metadata: {
         appointmentId: appointmentId,
         userId: appointmentData.userId,

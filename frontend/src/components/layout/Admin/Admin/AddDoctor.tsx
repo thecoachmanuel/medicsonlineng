@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
+import { Eye, EyeOff } from 'lucide-react';
 
 import { assets } from '@/assets/assets';
 import { AdminContext } from '@/context/AdminContext';
@@ -13,6 +14,7 @@ const AddDoctor = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState(false);
   const [experience, setExperience] = useState<string>('1 Year');
   const [fees, setFees] = useState<string>('');
   const [about, setAbout] = useState<string>('');
@@ -139,14 +141,23 @@ const AddDoctor = () => {
 
             <div className="flex-1 flex flex-col gap-1">
               <p>Set Password</p>
-              <input
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                className="border rounded px-3 py-2"
-                type="password"
-                placeholder="Password"
-                required
-              />
+              <div className="relative flex">
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  className="border rounded px-3 py-2 w-full pr-10"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             <div className="flex-1 flex flex-col gap-1">

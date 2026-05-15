@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 
 import { AppContext } from '@/context/AppContext';
 import type { IPatientAppContext } from '@/models/patient';
@@ -12,6 +13,7 @@ const Login = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const { token, setToken } = useContext(AppContext) as IPatientAppContext;
@@ -88,13 +90,22 @@ const Login = () => {
         </div>
         <div className="w-full ">
           <p>Password</p>
-          <input
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            className="border border-[#DADADA] rounded w-full p-2 mt-1"
-            type="password"
-            required
-          />
+          <div className="relative mt-1">
+            <input
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              className="border border-[#DADADA] rounded w-full p-2 pr-10"
+              type={showPassword ? "text" : "password"}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
         </div>
         <button className="bg-primary text-white w-full py-2 my-2 rounded-md text-base cursor-pointer">
           {state === 'Sign Up' ? 'Create account' : 'Login'}
