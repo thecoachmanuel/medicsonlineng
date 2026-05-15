@@ -11,12 +11,35 @@ const loginAdmin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-      const token = jwt.sign(email + password, process.env.JWT_SECRET);
-      res.json({ success: true, token });
-    } else {
-      res.json({ success: false, message: 'Invalid credentials' });
-    }
+  // ---------------------------------------------------------
+  // Validate required environment variables (critical on Vercel)
+  // ---------------------------------------------------------
+  const missingVars = [];
+  if (!process.env.ADMIN_EMAIL) missingVars.push('ADMIN_EMAIL');
+  if (!process.env.ADMIN_PASSWORD) missingVars.push('ADMIN_PASSWORD');
+  if (!process.env.JWT_SECRET) missingVars.push('JWT_SECRET');
+
+  if (missingVars.length) {
+    console.error('Admin login config error – missing env vars:', missingVars);
+    return res
+      .status(500)
+      .json({
+        success: false,
+        message: `Server configuration error: missing ${missingVars.join(', ')}`,
+      });
+  }
+
+  // ---------------------------------------------------------
+  // Authenticate admin credentials
+  // ---------------------------------------------------------
+  if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+    // Use a payload object for clarity (keeps token stable)
+    const token = jwt.sign({ email, password }, process.env.JWT_SECRET);
+    return res.json({ success: true, token });
+  }
+
+  // Invalid credentials
+  return res.json({ success: false, message: 'Invalid credentials' });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
